@@ -1,0 +1,5 @@
+---
+# defaults file for ansible-role-docker
+
+# Systemd drop-in paths (required on EL7)
+docker_dropin_dir: "/etc/systemd/system/docker.service.d"

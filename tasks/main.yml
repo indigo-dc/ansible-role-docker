@@ -1,52 +1,22 @@
-- name: Fail if OS distro is not Ubuntu 14.04
-  fail: 
-      msg="The role is designed only for Ubuntu 14.04"
-  when: "{{ ansible_distribution_version | version_compare('14.04', '!=') }}"
+---
+- name: Fail if the OS is not supported
+  fail:
+    msg="This role is not supported on {{ansible_distribution}}"
+  when: "ansible_distribution != 'Ubuntu' and ansible_os_family != 'RedHat'"
 
-- name: Install dependencies
-  apt: 
-      name={{ item }} 
-      update_cache=yes
-      state=present
-  with_items: 
-      - python-dev
-      - python-setuptools
+- name: Include distribution-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "vars/{{ ansible_distribution|lower }}.yml"
+    - "vars/{{ ansible_os_family|lower }}.yml"
 
-- name: Install pip
-  easy_install: 
-      name=pip 
-      state=present
+# Include the relevant distro-specific task
+- name: Perform setup for Ubuntu
+  include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
 
-- name: Install docker-py
-  pip: 
-      name=docker-py 
-      state=present
-      version=1.2.3
-
-- name: Add docker apt repo
-  apt_repository:
-      repo='deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main'
-      state=present
-
-- name: Import the Docker repository key
-  apt_key:
-      url=https://apt.dockerproject.org/gpg
-      state=present
-      id=2C52609D
-
-- name: Install Docker package
-  apt:
-      name=docker-engine
-      update_cache=yes
-      state=present
-
-- name: Configure docker0 bridge
-  lineinfile:
-    dest: /etc/default/docker
-    state: present
-    insertafter: ^DOCKER_OPTS=.*
-    line: "DOCKER_OPTS=\"$DOCKER_OPTS --bip={{docker_bridge_ip}}/24 \""
-  notify:
-    - restart docker
+- name: Perform setup for EL and derivatives
+  include: redhat.yml
+  when: ansible_os_family == 'RedHat'
 
 - meta: flush_handlers
