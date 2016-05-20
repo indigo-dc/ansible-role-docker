@@ -1,37 +1,14 @@
 ---
-- name: Fail if distro is not supported nor tested
+- name: "[EL] Fail if distro is not supported nor tested"
   fail: msg="The role is designed only for RedHat/CentOS 7.2 or later"
   when: "ansible_distribution not in ('RedHat', 'CentOS') or {{ ansible_distribution_version | version_compare('7.2', '<') }}"
 
-- name: Install base dependencies
-  yum:
-    name={{ item }}
-    update_cache=yes
-    state=present
-  with_items:
-    - python-devel
-    - python-setuptools
-
-- name: Install pip
-  easy_install:
-    name=pip
-    state=present
-
-- name: Install docker-py
-  pip:
-    name=docker-py
-    state=present
-    version=1.2.3
-
-- name: Add Docker yum repository
+- name: "[EL] Add Docker yum repository"
   copy:
     src=files/docker.repo dest=/etc/yum.repos.d/docker.repo mode=0644
 
-- name: Install Docker Engine package
-  yum:
-    name=docker-engine
-    update_cache=yes
-    state=present
+- name: "[EL] Perform common tasks"
+  include: common.yml
 
 # Setting up the docker0 bridge on Ubuntu 14.04 is done by literally changing
 # a single line in /etc/default/docker. Unfortunately on EL and derivatives
@@ -39,20 +16,15 @@
 # 1) create /etc/systemd/system/docker.service.d
 # 2) create custom.conf drop-in in said directory
 # 3) notify systemd it should reload all units and restart Docker
-- name: Create systemd drop-in directory for Docker
+- name: "[EL] Create systemd drop-in directory for Docker"
   file:
     path={{docker_dropin_dir}}
     state=directory
     mode=0755
 
-- name: Configure docker0 bridge
+- name: "[EL] Configure docker0 bridge"
   template:
     src=docker-dropin.conf.j2 dest={{docker_dropin_dir}}/custom.conf
   notify:
     - reload systemd
     - restart docker
-
-- name: Enable Docker on boot
-  service: name=docker enabled=yes
-
-- meta: flush_handlers
