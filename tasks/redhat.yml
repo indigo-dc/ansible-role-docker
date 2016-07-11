@@ -10,21 +10,28 @@
 - name: "[EL] Perform common tasks"
   include: common.yml
 
-# Setting up the docker0 bridge on Ubuntu 14.04 is done by literally changing
-# a single line in /etc/default/docker. Unfortunately on EL and derivatives
-# this means going through a systemd drop-in dance:
-# 1) create /etc/systemd/system/docker.service.d
-# 2) create custom.conf drop-in in said directory
-# 3) notify systemd it should reload all units and restart Docker
+# Setup Docker Engine to take configuration options from environment files
+# like we do on Ubuntu. This is the default for the docker-engine package in
+# RHEL7 but *not* in the upstream package, so we have to override the provided
+# systemd unit.
+#
+# See https://docs.docker.com/engine/admin/systemd/#custom-docker-daemon-options
+# for more information.
 - name: "[EL] Create systemd drop-in directory for Docker"
   file:
     path={{docker_dropin_dir}}
     state=directory
     mode=0755
 
-- name: "[EL] Configure docker0 bridge"
-  template:
-    src=docker-dropin.conf.j2 dest={{docker_dropin_dir}}/custom.conf
+- name: "[EL] Override Docker Engine startup parameters"
+  copy:
+    src=files/docker-dropin.conf dest={{docker_dropin_dir}}/custom.conf
   notify:
     - reload systemd
+    - restart docker
+
+- name: "[EL] Configure docker0 bridge"
+  template:
+    src=docker-network.conf.j2 dest=/etc/sysconfig/docker-network
+  notify:
     - restart docker
