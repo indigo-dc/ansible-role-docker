@@ -49,4 +49,14 @@
   notify:
     - restart docker
 
+- name: Configure registry mirror (if docker_mirror_host is defined)
+  lineinfile:
+    dest: /etc/default/docker
+    state: present
+    insertafter: ^DOCKER_OPTS=.*
+    line: "DOCKER_OPTS=\"$DOCKER_OPTS --registry-mirror={{docker_mirror_protocol}}://{{docker_mirror_host}}:{{docker_mirror_port}} \""
+  when: docker_mirror_host is defined
+  notify:
+    - restart docker
+
 - meta: flush_handlers
