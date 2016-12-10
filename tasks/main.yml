@@ -40,12 +40,15 @@
       update_cache=yes
       state=present
 
+- shell: ip link show {{ansible_default_ipv4.interface}} | awk '/mtu/ { print $5}'
+  register: mtu
+
 - name: Configure docker0 bridge
   lineinfile:
     dest: /etc/default/docker
     state: present
     insertafter: ^DOCKER_OPTS=.*
-    line: "DOCKER_OPTS=\"$DOCKER_OPTS --bip={{docker_bridge_ip}}/24 \""
+    line: "DOCKER_OPTS=\"$DOCKER_OPTS --bip={{docker_bridge_ip}}/24 --mtu {{mtu.stdout}} \""
   notify:
     - restart docker
 
