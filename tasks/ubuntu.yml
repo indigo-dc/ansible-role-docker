@@ -1,9 +1,4 @@
 ---
-- name: "[Ubuntu] Fail if release is not supported"
-  fail:
-    msg="The role is designed only for Ubuntu 14.04"
-  when: "{{ ansible_distribution_version | version_compare('14.04', '!=') }}"
-
 - name: "[Ubuntu] Add docker apt repo"
   apt_repository:
     repo='deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main'
