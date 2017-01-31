@@ -1,0 +1,21 @@
+#######################################
+### This file is managed by Ansible ###
+###    DO NOT MODIFY IT MANUALLY    ###
+#######################################
+
+[Service]
+#EnvironmentFile=-/etc/sysconfig/docker
+#EnvironmentFile=-/etc/sysconfig/docker-storage
+#EnvironmentFile=-/etc/sysconfig/docker-network
+EnvironmentFile=-{{docker_env_dir}}/docker
+EnvironmentFile=-{{docker_env_dir}}/docker-storage
+EnvironmentFile=-{{docker_env_dir}}/docker-network
+ExecStart=
+ExecStart=/usr/bin/dockerd $OPTIONS \
+          $DOCKER_STORAGE_OPTIONS \
+          $DOCKER_NETWORK_OPTIONS \
+          $DOCKER_CLUSTER_OPTIONS \
+          $BLOCK_REGISTRY \
+          $INSECURE_REGISTRY \
+          $DOCKER_REGISTRY_OPTIONS
+

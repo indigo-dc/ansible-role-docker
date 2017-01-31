@@ -1,0 +1,32 @@
+---
+- name: "[Ubuntu] Fail if release is not supported"
+  fail:
+    msg="The role is designed only for Ubuntu 14.04"
+  when: "{{ ansible_distribution_version | version_compare('14.04', '!=') }} and {{ ansible_distribution_version | version_compare('16.04', '!=') }}"
+
+- name: "[Ubuntu] Add docker apt repo"
+  apt_repository:
+    repo='deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main'
+    state=present
+
+- name: "[Ubuntu] Import the Docker repository key"
+  apt_key:
+    url=https://apt.dockerproject.org/gpg
+    state=present
+    id=2C52609D
+
+- name: "[Ubuntu] Force an apt cache refresh"
+  apt: update_cache=yes
+  changed_when: False
+
+- name: "[Ubuntu] Perform common tasks"
+  include: common.yml
+
+- name: "[Ubuntu] Configure docker options"
+  include: systemd.yml
+  when: ansible_service_mgr == 'systemd'
+
+- name: "[Ubuntu] Configure docker options"
+  include: upstart.yml
+  when: ansible_service_mgr != 'systemd'
+

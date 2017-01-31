@@ -1,0 +1,27 @@
+---
+- shell: ip link show {{ansible_default_ipv4.interface}} | awk '/mtu/ { print $5}'
+  register: mtu
+  changed_when: False
+
+- set_fact:
+    docker_bridge_mtu: "{{mtu.stdout}}"
+
+- name: "Configure docker0 bridge"
+  lineinfile:
+    dest: /etc/default/docker
+    state: present
+    insertafter: ^DOCKER_OPTS=.*
+    line: "DOCKER_OPTS=\"$DOCKER_OPTS --bip={{docker_bridge_ip}}/24 --mtu {{docker_bridge_mtu}} \""
+  notify:
+    - restart docker
+
+- name: Configure registry mirror (if docker_mirror_host is defined)
+  lineinfile:
+    dest: /etc/default/docker
+    state: present
+    insertafter: ^DOCKER_OPTS=.*
+    line: "DOCKER_OPTS=\"$DOCKER_OPTS --registry-mirror={{docker_mirror_protocol}}://{{docker_mirror_host}}:{{docker_mirror_port}} \""
+  when: docker_mirror_host is defined
+  notify:
+    - restart docker
+
