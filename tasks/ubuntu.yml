@@ -2,7 +2,7 @@
 - name: "[Ubuntu] Fail if release is not supported"
   fail:
     msg="The role is designed only for Ubuntu 14.04"
-  when: "{{ ansible_distribution_version | version_compare('14.04', '!=') }}"
+  when: "{{ ansible_distribution_version | version_compare('14.04', '!=') }} and {{ ansible_distribution_version | version_compare('16.04', '!=') }}"
 
 - name: "[Ubuntu] Add docker apt repo"
   apt_repository:
@@ -17,15 +17,16 @@
 
 - name: "[Ubuntu] Force an apt cache refresh"
   apt: update_cache=yes
+  changed_when: False
 
 - name: "[Ubuntu] Perform common tasks"
   include: common.yml
 
-- name: "[Ubuntu] Configure docker0 bridge"
-  lineinfile:
-    dest: /etc/default/docker
-    state: present
-    insertafter: ^DOCKER_OPTS=.*
-    line: "DOCKER_OPTS=\"$DOCKER_OPTS --bip={{docker_bridge_ip}}/24 \""
-  notify:
-    - restart docker
+- name: "[Ubuntu] Configure docker options"
+  include: systemd.yml
+  when: ansible_service_mgr == 'systemd'
+
+- name: "[Ubuntu] Configure docker options"
+  include: upstart.yml
+  when: ansible_service_mgr != 'systemd'
+

@@ -1,0 +1,42 @@
+---
+# Setup Docker Engine to take configuration options from environment files
+# like we do on Ubuntu. This is the default for the docker-engine package in
+# RHEL7 but *not* in the upstream package, so we have to override the provided
+# systemd unit.
+#
+# See https://docs.docker.com/engine/admin/systemd/#custom-docker-daemon-options
+# for more information.
+- name: "Create systemd drop-in directory for Docker"
+  file:
+    path={{docker_dropin_dir}}
+    state=directory
+    mode=0755
+
+- name: "Override Docker Engine startup parameters"
+  template:
+    src=docker-dropin.conf.j2 dest={{docker_dropin_dir}}/custom.conf
+  notify:
+    - reload systemd
+    - restart docker
+
+- shell: ip link show {{ansible_default_ipv4.interface}} | awk '/mtu/ { print $5}'
+  register: mtu
+  changed_when: False
+
+- set_fact:
+    docker_bridge_mtu: "{{mtu.stdout}}"
+
+- name: "Configure docker0 bridge"
+  template:
+    src=docker-network.conf.j2 dest={{docker_env_dir}}/docker-network
+  notify:
+    - reload systemd
+    - restart docker
+
+- name: "Configure registry mirror (if docker_mirror_host is defined)"
+  lineinfile:
+    src=docker-registry-mirror.conf.j2 dest={{docker_env_dir}}/docker-registry-mirror
+  when: docker_mirror_host is defined
+  notify:
+    - reload systemd
+    - restart docker

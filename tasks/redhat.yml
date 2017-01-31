@@ -10,28 +10,6 @@
 - name: "[EL] Perform common tasks"
   include: common.yml
 
-# Setup Docker Engine to take configuration options from environment files
-# like we do on Ubuntu. This is the default for the docker-engine package in
-# RHEL7 but *not* in the upstream package, so we have to override the provided
-# systemd unit.
-#
-# See https://docs.docker.com/engine/admin/systemd/#custom-docker-daemon-options
-# for more information.
-- name: "[EL] Create systemd drop-in directory for Docker"
-  file:
-    path={{docker_dropin_dir}}
-    state=directory
-    mode=0755
+- name: "[EL] Configure docker daemon options"
+  include: systemd.yml
 
-- name: "[EL] Override Docker Engine startup parameters"
-  copy:
-    src=files/docker-dropin.conf dest={{docker_dropin_dir}}/custom.conf
-  notify:
-    - reload systemd
-    - restart docker
-
-- name: "[EL] Configure docker0 bridge"
-  template:
-    src=docker-network.conf.j2 dest=/etc/sysconfig/docker-network
-  notify:
-    - restart docker
