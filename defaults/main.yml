@@ -8,3 +8,4 @@ docker_dropin_dir: "/etc/systemd/system/docker.service.d"
 #docker_mirror_host: undef
 docker_mirror_protocol: "http"
 docker_mirror_port: 5000
+
