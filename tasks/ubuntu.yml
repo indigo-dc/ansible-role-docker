@@ -22,6 +22,14 @@
 - name: "[Ubuntu] Perform common tasks"
   include: common.yml
 
+- name: "[Ubuntu] Install Docker Engine package"
+  package:
+    name=docker-engine
+    state=latest
+
+- name: "[Ubuntu] Ensure docker-engine is enabled at boot time"
+  service: name=docker enabled=yes
+
 - name: "[Ubuntu] Configure docker options"
   include: systemd.yml
   when: ansible_service_mgr == 'systemd'

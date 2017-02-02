@@ -10,6 +10,29 @@
 - name: "[EL] Perform common tasks"
   include: common.yml
 
+- name: "[EL] Remove Docker package"
+  package:
+    name=docker
+    state=absent
+
+- name: "[EL] Remove Docker Common package"
+  package:
+    name=docker-common
+    state=absent
+
+- name: "[EL] Remove Docker Selinux package"
+  package:
+    name=docker-selinux
+    state=absent
+
+- name: "[EL] Install Docker Engine package"
+  package:
+    name={{  docker_package }}
+    state=present
+
+- name: "[EL] Ensure docker-engine is enabled at boot time"
+  service: name=docker enabled=yes
+
 - name: "[EL] Configure docker daemon options"
   include: systemd.yml
 
