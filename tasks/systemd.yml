@@ -40,3 +40,18 @@
   notify:
     - reload systemd
     - restart docker
+
+- name: "Configure storage driver"
+  template:
+    src=docker-storage.conf.j2 dest=/etc/sysconfig/docker-storage
+  when: docker_storage_driver is defined
+  notify:
+    - restart docker
+
+- name: "Configure insecure registry"
+  template:
+    src=docker-registry.conf.j2 dest=/etc/sysconfig/docker-registry
+  when: docker_insecure_registry is defined
+  notify:
+    - restart docker
+

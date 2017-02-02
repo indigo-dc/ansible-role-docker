@@ -11,3 +11,10 @@ docker_mirror_port: 5000
 
 # Set Docker version manually (only EL7)
 docker_version: "docker-engine-1.13.0-1.el7.centos.x86_64"
+
+# Set docker_storage_driver to change default
+#docker_storage_driver: undef
+
+# Set docker_insecure_registry to configure insecure registry
+#docker_insecure_registry: "example.registry.name:5000"
+
