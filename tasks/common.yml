@@ -18,8 +18,7 @@
 - name: "[Common] Install docker-py"
   pip:
     name=docker-py
-    state=present
-    version=1.2.3
+    state=latest
 
 - name: "[Common] Install Docker Engine package"
   package:
