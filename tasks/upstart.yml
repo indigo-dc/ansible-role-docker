@@ -25,3 +25,14 @@
   notify:
     - restart docker
 
+- name: Configure storage driver (if docker_storage_driver is defined)
+  lineinfile:
+    dest: /etc/default/docker
+    state: present
+    insertafter: ^DOCKER_OPTS=.*
+    line: "DOCKER_OPTS=\"$DOCKER_OPTS --storage-driver={{docker_storage_driver}} \""
+  when: docker_storage_driver is defined
+  notify:
+    - restart docker
+
+

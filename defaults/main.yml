@@ -9,3 +9,6 @@ docker_dropin_dir: "/etc/systemd/system/docker.service.d"
 docker_mirror_protocol: "http"
 docker_mirror_port: 5000
 
+# set docker_storage_driver to change default
+#docker_storage_driver: undef
+

@@ -40,3 +40,12 @@
   notify:
     - reload systemd
     - restart docker
+
+- name: "Configure storage driver"
+  template:
+    src=docker-storage.conf.j2 dest=/etc/sysconfig/docker-storage
+  when: docker_storage_driver is defined
+  notify:
+    - reload systemd
+    - restart docker
+
