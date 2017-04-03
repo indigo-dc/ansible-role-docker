@@ -1,0 +1,7 @@
+#######################################
+### This file is managed by Ansible ###
+###    DO NOT MODIFY IT MANUALLY    ###
+#######################################
+
+DOCKER_DNS_OPTIONS="{% for dns in docker_dns %}--dns {{ dns }} {% endfor %}--dns-search {{ docker_dns_search }}"
+
