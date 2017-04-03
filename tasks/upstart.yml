@@ -6,7 +6,7 @@
 - set_fact:
     docker_bridge_mtu: "{{mtu.stdout}}"
 
-- name: "Configure docker0 bridge"
+- name: "[service-mgr=upstart] Configure docker0 bridge"
   lineinfile:
     dest: /etc/default/docker
     state: present
@@ -15,7 +15,7 @@
   notify:
     - restart docker
 
-- name: Configure registry mirror (if docker_mirror_host is defined)
+- name: "[service-mgr=upstart] Configure registry mirror (if docker_mirror_host is defined)"
   lineinfile:
     dest: /etc/default/docker
     state: present
@@ -25,7 +25,7 @@
   notify:
     - restart docker
 
-- name: Configure storage driver (if docker_storage_driver is defined)
+- name: "[service-mgr=upstart] Configure storage driver (if docker_storage_driver is defined)"
   lineinfile:
     dest: /etc/default/docker
     state: present
@@ -34,5 +34,16 @@
   when: docker_storage_driver is defined
   notify:
     - restart docker
+
+- name: "[service-mgr=upstart] Configure dns options (if options defined)"
+  lineinfile:
+    dest: /etc/default/docker
+    state: present
+    insertafter: ^DOCKER_OPTS=.*
+    line: "DOCKER_OPTS=\"$DOCKER_OPTS {% for dns in docker_dns %}--dns {{ dns }} {% endfor %} --dns-search {{docker_dns_search}} \""
+  when: docker_dns is defined and docker_dns_search is defined
+  notify:
+    - restart docker
+
 
 

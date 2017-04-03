@@ -12,3 +12,7 @@ docker_mirror_port: 5000
 # set docker_storage_driver to change default
 #docker_storage_driver: undef
 
+# set DNS options 
+#docker_dns: [ 127.0.0.1, 8.8.8.8 ]
+#docker_dns_search: service.consul
+

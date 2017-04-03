@@ -10,8 +10,10 @@
 EnvironmentFile=-{{docker_env_dir}}/docker
 EnvironmentFile=-{{docker_env_dir}}/docker-storage
 EnvironmentFile=-{{docker_env_dir}}/docker-network
+EnvironmentFile=-{{docker_env_dir}}/docker-dns
 ExecStart=
 ExecStart=/usr/bin/dockerd $OPTIONS \
+          $DOCKER_DNS_OPTIONS \
           $DOCKER_STORAGE_OPTIONS \
           $DOCKER_NETWORK_OPTIONS \
           $DOCKER_CLUSTER_OPTIONS \

@@ -6,13 +6,13 @@
 #
 # See https://docs.docker.com/engine/admin/systemd/#custom-docker-daemon-options
 # for more information.
-- name: "Create systemd drop-in directory for Docker"
+- name: "[service-mgr=systemd] Create systemd drop-in directory for Docker"
   file:
     path={{docker_dropin_dir}}
     state=directory
     mode=0755
 
-- name: "Override Docker Engine startup parameters"
+- name: "[service-mgr=systemd] Override Docker Engine startup parameters"
   template:
     src=docker-dropin.conf.j2 dest={{docker_dropin_dir}}/custom.conf
   notify:
@@ -26,14 +26,14 @@
 - set_fact:
     docker_bridge_mtu: "{{mtu.stdout}}"
 
-- name: "Configure docker0 bridge"
+- name: "[service-mgr=systemd] Configure docker0 bridge"
   template:
     src=docker-network.conf.j2 dest={{docker_env_dir}}/docker-network
   notify:
     - reload systemd
     - restart docker
 
-- name: "Configure registry mirror (if docker_mirror_host is defined)"
+- name: "[service-mgr=systemd] Configure registry mirror (if docker_mirror_host is defined)"
   lineinfile:
     src=docker-registry-mirror.conf.j2 dest={{docker_env_dir}}/docker-registry-mirror
   when: docker_mirror_host is defined
@@ -41,11 +41,21 @@
     - reload systemd
     - restart docker
 
-- name: "Configure storage driver"
+- name: "[service-mgr=systemd] Configure storage driver"
   template:
-    src=docker-storage.conf.j2 dest=/etc/sysconfig/docker-storage
+    src=docker-storage.conf.j2 dest={{docker_env_dir}}/docker-storage
   when: docker_storage_driver is defined
   notify:
     - reload systemd
     - restart docker
+
+
+- name: "[service-mgr=systemd] Configure DNS options"
+  template:
+    src=docker-dns.conf.j2 dest={{docker_env_dir}}/docker-dns
+  when: docker_dns is defined and docker_dns_search is defined
+  notify:
+    - reload systemd
+    - restart docker
+
 
