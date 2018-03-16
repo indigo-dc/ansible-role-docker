@@ -20,10 +20,13 @@
     name=docker-py
     state=latest
 
-- name: "[Common] Install Docker Engine package"
+- name: "[Common] Install Docker CE package"
   package:
-    name=docker-engine
+    name=docker-ce
     state=present
 
-- name: "[Common] Ensure docker-engine is enabled at boot time"
+- name: "[Common] Ensure docker-ce is enabled at boot time"
   service: name=docker enabled=yes
+
+#- name: "Configure docker"
+#  include: configure.yml
