@@ -24,8 +24,8 @@
 - name: "[Common] Ensure docker-ce is enabled at boot time"
   service: 
     name: docker
-    enabled: true
-    state: started
+    enabled: yes
+    state: restarted
 
 #- name: "Configure docker"
 #  include: configure.yml
