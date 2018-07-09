@@ -1,22 +1,24 @@
 ---
 - name: Fail if the OS is not supported
   fail:
-    msg="This role is not supported on {{ansible_distribution}}"
-  when: "ansible_distribution != 'Ubuntu' and ansible_os_family != 'RedHat'"
+    msg: "This role is not supported on {{ansible_distribution}}"
+  when: 
+    - ansible_distribution != "Ubuntu"
+    - ansible_distribution != "CentOS"
 
 - name: Include distribution-specific variables
   include_vars: "{{ item }}"
   with_first_found:
     - "vars/{{ ansible_distribution|lower }}.yml"
-    - "vars/{{ ansible_os_family|lower }}.yml"
+    - "vars/{{ ansible_distribution|lower }}.yml"
 
 # Include the relevant distro-specific task
 - name: Perform setup for Ubuntu
   include: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
 
-- name: Perform setup for EL and derivatives
-  include: redhat.yml
-  when: ansible_os_family == 'RedHat'
+- name: Perform setup for CentOS
+  include: centos.yml
+  when: ansible_distribution == 'CentOS'
 
 - meta: flush_handlers

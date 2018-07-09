@@ -3,15 +3,16 @@ galaxy_info:
   description: Install docker engine
   company: INDIGO-DataCloud
   license: Apache
-  min_ansible_version: 2.0
+  min_ansible_version: 2.3  # oldest previous version in the documentation
   platforms:
     - name: Ubuntu
       versions:
-        - trusty
-        - xenial
+        - trusty  # 14.04 LTS
+        - xenial  # 16.04 LTS
+        - bionic  # 18.04 LTS
     - name: EL
       versions:
-        - 7
+        - 7  # CentOS 7
   galaxy_tags:
     - docker
 
