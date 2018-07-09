@@ -9,7 +9,19 @@
   with_items:
     - "{{ python_dev_package }}"
     - python-setuptools
-    - python-pip
+
+- name: "[Common] Download get-pip.py"
+  get_url: 
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp
+    
+- name: "[Common] Install pip"
+  command: "python /tmp/get-pip.py"
+    
+- name: "[Common] Remove pip installer"
+  file: 
+    state: absent 
+    path: /tmp/get-pip.py
 
 # Required by the Ansible Docker module
 - name: "[Common] Install docker-py"
