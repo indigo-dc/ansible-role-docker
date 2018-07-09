@@ -20,10 +20,10 @@
     state: present
 
 - name: "[CentOS] Add Docker yum repo"
-  yum_repository:
-    name: docker-ce
-    description: Docker-CE YUM repo
-    baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    force: yes
 
 - name: "[CentOS] Perform common tasks"
   include_tasks: "common.yml"
