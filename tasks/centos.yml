@@ -3,7 +3,7 @@
   fail:
     msg: "[CentOS] The role is not designed for CentOS {{ansible_distribution_version}}"
   when:
-    - ansible_distribution_version is version('7', '>=')
+    - ansible_distribution_version is version('7.0', '>=')
 
 - name: "[CentOS] Install required packages"
   apt:
