@@ -1,0 +1,29 @@
+---
+- name: "[CentOS] Fail if release is not supported"
+  fail:
+    msg: "[CentOS] The role is not designed for CentOS {{ansible_distribution_version}}"
+  when:
+    - ansible_distribution_version is version('', '>=')
+
+- name: "[CentOS] Install required packages"
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+
+- name: "[CentOS] Add Docker apt repo"
+  yum_repository:
+    name: docker-ce
+    description: Docker-CE YUM repo
+    baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: "[CentOS] Force an apt cache refresh"
+  yum: 
+    update_cache: yes
+  changed_when: False
+
+- name: "[CentOS] Perform common tasks"
+  include_tasks: "common.yml"

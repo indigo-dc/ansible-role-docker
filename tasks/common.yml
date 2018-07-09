@@ -3,30 +3,32 @@
 
 - name: "[Common] Install base dependencies"
   package:
-    name={{ item }}
-    state=present
+    name: {{ item }}
+    state: present
   with_items:
     - "{{ python_dev_package }}"
     - "{{ python_setuptools_package }}"
 
 - name: "[Common] Install pip"
   easy_install:
-    name=pip
-    state=present
+    name: pip
+    state: present
 
 # Required by the Ansible Docker module
 - name: "[Common] Install docker-py"
   pip:
-    name=docker-py
-    state=latest
+    name: docker-py
+    state: latest
 
 - name: "[Common] Install Docker CE package"
   package:
-    name=docker-ce
-    state=present
+    name: docker-ce
+    state: present
 
 - name: "[Common] Ensure docker-ce is enabled at boot time"
-  service: name=docker enabled=yes
+  service: 
+    name: docker
+    enabled: yes
 
 #- name: "Configure docker"
 #  include: configure.yml

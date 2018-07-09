@@ -1,27 +1,37 @@
 ---
 - name: "[Ubuntu] Fail if release is not supported"
   fail:
-    msg: "The role is not designed for Ubuntu {{ansible_distribution_version}}"
+    msg: "[Ubuntu] The role is not designed for Ubuntu {{ansible_distribution_version}}"
   when:
     - ansible_distribution_version is version('14.04', '!=')
     - ansible_distribution_version is version('16.04', '!=')
     - ansible_distribution_version is version('18.04', '!=') 
 
-- name: "[Ubuntu] Add docker apt repo"
-  apt_repository:
-    repo='deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
-    state=present
+- name: "[Ubuntu] Install required packages"
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - apt-transport-https 
+    - ca-certificates 
+    - curl 
+    - software-properties-common
 
-- name: "[Ubuntu] Import the Docker repository key"
+- name: "[Ubuntu] Add Docker apt repo key"
   apt_key:
-    url=https://download.docker.com/linux/ubuntu/gpg
-    state=present
-    id=0EBFCD88
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+    id: 0EBFCD88
+
+- name: "[Ubuntu] Add Docker apt repo"
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    state: present
 
 - name: "[Ubuntu] Force an apt cache refresh"
-  apt: update_cache=yes
+  apt: 
+    update_cache: yes
   changed_when: False
 
 - name: "[Ubuntu] Perform common tasks"
-  include: common.yml
-
+  include_tasks: "common.yml"
