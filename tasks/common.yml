@@ -25,7 +25,11 @@
   service: 
     name: docker
     enabled: yes
-    state: restarted
+
+- name: "[Common] Start docker-ce service"
+  service: 
+    name: docker
+    state: started
 
 #- name: "Configure docker"
 #  include: configure.yml
