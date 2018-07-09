@@ -25,5 +25,10 @@
     dest: /etc/yum.repos.d/docker-ce.repo
     force: yes
 
+- name: "[CentOS] Install python pip with package manager"
+  yum:
+    name: python-pip
+    enablerepo: "epel"
+
 - name: "[CentOS] Perform common tasks"
   include_tasks: "common.yml"
