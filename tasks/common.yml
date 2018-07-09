@@ -35,12 +35,12 @@
     state: present
 
 - name: "[Common] Ensure docker-ce is enabled at boot time"
-  systemd: 
+  service: 
     name: docker
     enabled: yes
 
 - name: "[Common] Start docker-ce service"
-  systemd: 
+  service: 
     name: docker
     state: started
 
