@@ -14,11 +14,11 @@
 
 # Include the relevant distro-specific task
 - name: Perform setup for Ubuntu
-  include: ubuntu.yml
+  include_tasks: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
 
 - name: Perform setup for CentOS
-  include: centos.yml
+  include_tasks: centos.yml
   when: ansible_distribution == 'CentOS'
 
 - meta: flush_handlers
