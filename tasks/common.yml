@@ -5,6 +5,7 @@
   package:
     name: "{{ item }}"
     state: present
+    update_cache: yes
   with_items:
     - "{{ python_dev_package }}"
     - python-setuptools

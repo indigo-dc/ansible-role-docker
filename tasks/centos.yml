@@ -14,6 +14,11 @@
     - device-mapper-persistent-data
     - lvm2
 
+- name: "[CentOS] Add Docker yum repo key"
+  rpm_key:
+    key: https://download.docker.com/linux/centos/gpg
+    state: present
+
 - name: "[CentOS] Add Docker yum repo"
   yum_repository:
     name: docker-ce
