@@ -28,5 +28,5 @@
 - name: "[Common] Ensure docker-ce is enabled at boot time"
   service: name=docker enabled=yes
 
-#- name: "Configure docker"
-#  include: configure.yml
+- name: "Configure docker"
+  include: configure.yml
