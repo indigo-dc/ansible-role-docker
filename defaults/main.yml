@@ -1,8 +1,8 @@
 ---
 # defaults file for ansible-role-docker
-
+docker_config: {}
 docker_options:
-  bip:             "{{ docker_bridge_ip       |default(None) }}"
+  bip:             "{{ docker_bridge_ip_cidr  |default(None) }}"
   mtu:             "{{ docker_bridge_mtu      |default(None) }}"
   dns:             "{{ docker_dns             |default(None) }}"
   dns-search:      "{{ docker_dns_search      |default(None) }}"

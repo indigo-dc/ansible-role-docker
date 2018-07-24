@@ -6,17 +6,19 @@ Install docker-engine
 Role Variables
 --------------
 
-- `docker_bridge_ip` : IP to be assigned to the docker bridge 
-- `docker_mirror_host`: if defined, the role configures docker-engine with option --registry-mirror={{docker_mirror_protocol}}://{{docker_mirror_host}}:{{docker_mirror_port}}
-- `docker_mirror_protocol`: default to "http"
-- `docker_mirror_port`: default to 5000
+- `docker_bridge_ip_cidr` (optional): IP to be assigned to the docker bridge. Using standard CIDR notation, e.g. 192.168.1.5/24
+- `docker_bridge_mtu` (optional): override the maximum packet length on docker0
+- `docker_dns` (list, optional): override DNS servers to use
+- `docker_dns_search` (list, optional): sets the domain names that are searched
+- `docker_regitry_mirror`( optional): URL of the registry mirror to be configured
+- `docker_storage_driver` (optional): Storage driver to use
 
 Example Playbook
 ----------------
 
     - hosts: servers
       roles:
-         - { role: indigo-dc.docker, docker_bridge_ip: "172.0.17.1" }
+         - { role: indigo-dc.docker, docker_bridge_ip_cidr: "172.0.17.1/24" }
 
 License
 -------
