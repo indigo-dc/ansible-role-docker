@@ -23,7 +23,7 @@
 - name: "[Common] Set docker-py package to be installed"
   set_fact:
     docker_py_package: "docker"
-  when: ansible_version.full is version('2.6', '>=')
+  when: ansible_version.minor >= 6
 
 # Required by the Ansible Docker module
 - name: "[Common] Install docker-py dependency"

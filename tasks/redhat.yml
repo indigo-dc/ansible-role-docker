@@ -1,7 +1,17 @@
 ---
-- name: "[EL] Fail if distro is not supported nor tested"
-  fail: msg="The role is designed only for RedHat/CentOS 7.2 or later"
-  when: "ansible_distribution not in ('RedHat', 'CentOS') or ( ansible_distribution_version is version('7.2', '<') )"
+- name: "[EL] Fail if distro is not supported nor tested (ansible version < 2.5)"
+  fail:
+    msg="The role is designed only for RedHat/CentOS 7.2 or later"
+  when:
+    - ansible_version.minor < 5
+    - ansible_distribution not in ('RedHat', 'CentOS') or ( ansible_distribution_version | version_compare('7.2', '<') )
+
+- name: "[EL] Fail if distro is not supported nor tested (ansible version >= 2.5)"
+  fail:
+    msg="The role is designed only for RedHat/CentOS 7.2 or later"
+  when:
+    - ansible_version.minor >= 5
+    - ansible_distribution not in ('RedHat', 'CentOS') or ( ansible_distribution_version is version('7.2', '<') )
 
 - name: "[EL] Install required packages"
   yum: 
