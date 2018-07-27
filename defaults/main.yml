@@ -1,18 +1,13 @@
 ---
 # defaults file for ansible-role-docker
+docker_config: {}
+docker_options:
+  bip:             "{{ docker_bridge_ip_cidr  |default(None) }}"
+  mtu:             "{{ docker_bridge_mtu      |default(None) }}"
+  dns:             "{{ docker_dns             |default(None) }}"
+  dns-search:      "{{ docker_dns_search      |default(None) }}"
+  registry-mirror: "{{ docker_registry_mirror |default(None) }}"
+  storage-driver : "{{ docker_storage_driver  |default(None) }}"
+  
 
-# Systemd drop-in paths (required on EL7 and Ubuntu > 15.x)
-docker_dropin_dir: "/etc/systemd/system/docker.service.d"
-
-# set docker_mirror_host to configure a registry mirror
-#docker_mirror_host: undef
-docker_mirror_protocol: "http"
-docker_mirror_port: 5000
-
-# set docker_storage_driver to change default
-#docker_storage_driver: undef
-
-# set DNS options 
-#docker_dns: [ 127.0.0.1, 8.8.8.8 ]
-#docker_dns_search: service.consul
 

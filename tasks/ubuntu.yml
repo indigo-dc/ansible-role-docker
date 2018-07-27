@@ -1,19 +1,28 @@
 ---
-- name: "[Ubuntu] Fail if release is not supported"
+- name: "[Ubuntu] Fail if release is not supported (ansible version < 2.5)"
   fail:
-    msg="The role is designed only for Ubuntu 14.04"
-  when: "( ansible_distribution_version | version_compare('14.04', '!=') ) and ( ansible_distribution_version | version_compare('16.04', '!=') )"
+    msg="The role is designed only for Ubuntu 16.04"
+  when:
+    - ansible_version.minor < 5
+    - ansible_distribution_version | version_compare('16.04', '!=')
+
+- name: "[Ubuntu] Fail if release is not supported (ansible version >= 2.5)"
+  fail:
+    msg="The role is designed only for Ubuntu 16.04"
+  when:
+     - ansible_version.minor >= 5
+     - ansible_distribution_version is version('16.04', '!=')
 
 - name: "[Ubuntu] Add docker apt repo"
   apt_repository:
-    repo='deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main'
+    repo='deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
     state=present
 
 - name: "[Ubuntu] Import the Docker repository key"
   apt_key:
-    url=https://apt.dockerproject.org/gpg
+    url=https://download.docker.com/linux/ubuntu/gpg
     state=present
-    id=2C52609D
+    id=0EBFCD88
 
 - name: "[Ubuntu] Force an apt cache refresh"
   apt: update_cache=yes
@@ -21,12 +30,4 @@
 
 - name: "[Ubuntu] Perform common tasks"
   include: common.yml
-
-- name: "[Ubuntu] Configure docker options"
-  include: systemd.yml
-  when: ansible_service_mgr == 'systemd'
-
-- name: "[Ubuntu] Configure docker options"
-  include: upstart.yml
-  when: ansible_service_mgr != 'systemd'
 
