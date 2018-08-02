@@ -2,7 +2,7 @@
 - name: Fail if the OS is not supported
   fail:
     msg: "This role is not supported on {{ansible_distribution}}"
-  when: 
+  when:
     - ansible_distribution != "Ubuntu"
     - ansible_distribution != "CentOS"
 
