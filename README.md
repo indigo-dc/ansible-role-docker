@@ -12,6 +12,8 @@ Role Variables
 - `docker_dns_search` (list, optional): sets the domain names that are searched
 - `docker_regitry_mirror`( optional): URL of the registry mirror to be configured
 - `docker_storage_driver` (optional): Storage driver to use
+- `docker_log_driver` (optional): Log driver to use. Default: 'json-file'
+- `docker_logs_opts` (optional): Log driver options. Default: { 'max-file': '3', 'max-size': '100m' }
 
 Example Playbook
 ----------------
