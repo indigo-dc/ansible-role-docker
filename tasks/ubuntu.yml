@@ -1,4 +1,5 @@
 ---
+  
 - name: "[Ubuntu] Fail if release is not supported (ansible version < 2.5)"
   fail:
     msg="The role is designed only for Ubuntu 16.04"
@@ -12,6 +13,9 @@
   when:
      - ansible_version.minor >= 5
      - ansible_distribution_version is version('16.04', '!=')
+
+- name: Install docker requisites
+  apt: name=apt-transport-https,ca-certificates,software-properties-common
 
 - name: "[Ubuntu] Add docker apt repo"
   apt_repository:
