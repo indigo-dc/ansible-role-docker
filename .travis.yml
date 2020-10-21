@@ -1,21 +1,22 @@
 ---
 dist: bionic
 
+sudo: required
+
 language: python
 python: "2.7"
 
-# Use the new container infrastructure
-sudo: false
+before_install:
+ - sudo apt-get update -qq
 
-# Install ansible
 addons:
   apt:
     packages:
     - python-pip
 
 install:
-  # Install ansible
-  - pip install ansible
+  # Check ansible version
+  - sudo pip install ansible
 
   # Check ansible version
   - ansible --version
@@ -24,11 +25,14 @@ install:
   - printf '[defaults]\nhost_key_checking = False\nroles_path=../' >ansible.cfg
 
 script:
+  # Install dependency
+  - sudo ansible-galaxy install grycap.ntp
+  
   # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  - sudo ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
   # Basic role check
-  - ansible-playbook tests/test.yml -i tests/inventory
+  - sudo ansible-playbook tests/test.yml -i tests/inventory
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
