@@ -1,5 +1,12 @@
 ---
-dist: bionic
+jobs:
+  include:
+   - os: linux
+     dist: xenial
+   - os: linux
+     dist: bionic
+   - os: linux
+     dist: focal
 
 sudo: required
 

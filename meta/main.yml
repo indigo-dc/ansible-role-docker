@@ -8,6 +8,8 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - xenial
+        - bionic
+        - focal
     - name: EL
       versions:
         - 7
