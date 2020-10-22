@@ -1,18 +1,15 @@
 ---
-dist: bionic
+jobs:
+  include:
+   - os: linux
+     dist: xenial
+   - os: linux
+     dist: bionic
 
 sudo: required
 
 language: python
 python: "2.7"
-
-before_install:
- - sudo apt-get update -qq
-
-addons:
-  apt:
-    packages:
-    - python-pip
 
 install:
   # Check ansible version
