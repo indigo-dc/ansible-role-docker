@@ -1,37 +1,6 @@
 ---
 # Common setup tasks for all supported OS families
 
-- name: "[Common] Install base dependencies"
-  package:
-    name={{ item }}
-    state=present
-  with_items:
-    - "{{ python_dev_package }}"
-    - "{{ python_setuptools_package }}"
-
-- name: "[Common] Install pip"
-  easy_install:
-    name=pip
-    state=present
-
-- name: "[Common] Set docker-py package to be installed"
-  set_fact:
-    docker_py_package: "docker-py"
-
-# https://github.com/ansible/ansible/issues/42162
-# https://github.com/dcos-labs/ansible-dcos/pull/20
-- name: "[Common] Set docker-py package to be installed"
-  set_fact:
-    docker_py_package: "docker"
-  when: ansible_version.minor >= 6
-
-# Required by the Ansible Docker module
-- name: "[Common] Install docker-py dependency"
-  pip:
-    name="{{docker_py_package}}"
-    state=latest
-  
-
 - name: "[Common] Install Docker CE package"
   package:
     name=docker-ce
