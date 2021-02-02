@@ -14,6 +14,11 @@ Role Variables
 - `docker_storage_driver` (optional): Storage driver to use
 - `docker_log_driver` (optional): Log driver to use. Default: 'json-file'
 - `docker_logs_opts` (optional): Log driver options. Default: { 'max-file': '3', 'max-size': '100m' }
+- `docker_pip_package` (optional): The name of the packge to install to get pip on the system. For older systems that don't have Python 3 available, you can set this to `python-pip`. Default: `python3-pip`
+
+Dependencies
+--------------
+- geerlingguy.pip
 
 Example Playbook
 ----------------
