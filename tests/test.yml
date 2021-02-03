@@ -1,5 +1,7 @@
 ---
 - hosts: localhost
   remote_user: root
+  vars:
+    docker_pip_package: python-pip
   roles:
     - ansible-role-docker
