@@ -25,7 +25,7 @@ install:
   - ansible-galaxy install geerlingguy.pip
   
   # Workaround for https://github.com/geerlingguy/ansible-role-pip/issues/37
-  - apt update
+  - sudo apt update
 
 script:
   # Basic role syntax check
