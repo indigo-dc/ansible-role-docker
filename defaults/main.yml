@@ -1,5 +1,6 @@
 ---
 # defaults file for ansible-role-docker
+docker_pip_package: python3-pip
 docker_config: {}
 docker_options:
   bip:             "{{ docker_bridge_ip_cidr  |default(None) }}"
