@@ -11,6 +11,7 @@ docker_options:
   storage-driver : "{{ docker_storage_driver  |default(None) }}"
   log-driver:      "{{ docker_log_driver      |default('json-file') }}"
   log-opts:        "{{ docker_logs_opts       |default( { 'max-file': '3', 'max-size': '100m' } ) }}"
+docker_compose_version: ""
   
 
 
