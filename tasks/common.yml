@@ -8,7 +8,12 @@
 
 - name: "[Common] Ensure docker-ce is enabled at boot time"
   ansible.builtin.service:
-    name: docker
+    name:
+      - docker
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
     enabled: true
 
 - name: "Configure docker"
