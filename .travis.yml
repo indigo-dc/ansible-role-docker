@@ -1,10 +1,10 @@
 ---
 jobs:
   include:
-   - os: linux
-     dist: xenial
-   - os: linux
-     dist: bionic
+    - os: linux
+      dist: xenial
+    - os: linux
+      dist: bionic
 
 sudo: required
 
@@ -20,10 +20,7 @@ install:
 
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../' >ansible.cfg
-  
-  # Download role dependencies
-  - ansible-galaxy install geerlingguy.pip
-  
+
   # Workaround for https://github.com/geerlingguy/ansible-role-pip/issues/37
   - sudo apt update
 

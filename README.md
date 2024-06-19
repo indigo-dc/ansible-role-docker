@@ -1,7 +1,7 @@
 Docker Role
 =========
 
-Install docker-engine and optionally docker-compose
+Install docker-engine on Ubuntu/Debian and RedHat-like OS
 
 Role Variables
 --------------
@@ -14,12 +14,10 @@ Role Variables
 - `docker_storage_driver` (optional): Storage driver to use
 - `docker_log_driver` (optional): Log driver to use. Default: 'json-file'
 - `docker_logs_opts` (optional): Log driver options. Default: { 'max-file': '3', 'max-size': '100m' }
-- `docker_pip_package` (optional): The name of the packge to install to get pip on the system. For older systems that don't have Python 3 available, you can set this to `python-pip`. Default: `python3-pip`
-- `docker_compose_version` (optional): if provided, docker-compose will be installed with the requested version. Default: "", i.e. docker-compose is not installed by default.
 
 Dependencies
 --------------
-- geerlingguy.pip
+None
 
 Example Playbook
 ----------------

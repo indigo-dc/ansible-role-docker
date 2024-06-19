@@ -19,9 +19,4 @@ galaxy_info:
   galaxy_tags:
     - docker
 
-dependencies:
-  - role: geerlingguy.pip
-    vars:
-      pip_package: "{{ docker_pip_package }}"
-      pip_install_packages:
-        - "{{ 'docker' if ansible_version.minor >= 6 else 'docker-py' }}"
+dependencies: []
