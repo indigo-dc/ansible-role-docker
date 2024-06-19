@@ -1,7 +1,9 @@
 ---
 - name: Make sure /etc/docker exists
   ansible.builtin.file:
-    path: /etc/docker state=directory
+    path: /etc/docker
+    state: directory
+    mode: '0644'
 
 - name: Set docker configuration
   ansible.builtin.set_fact:
