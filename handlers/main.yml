@@ -1,7 +1,7 @@
 ---
 # handlers file for docker.ubuntu
 - name: Reload systemd
-  ansible.builtin.systemd_service:
+  ansible.builtin.systemd:
     daemon_reload: true
 
 - name: Start docker

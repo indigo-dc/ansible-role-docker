@@ -3,17 +3,17 @@
 
 - name: "[Common] Install Docker CE package"
   ansible.builtin.package:
-    name: docker-ce
-    state: present
-
-- name: "[Common] Ensure docker-ce is enabled at boot time"
-  ansible.builtin.service:
     name:
-      - docker
+      - docker-ce
       - docker-ce-cli
       - containerd.io
       - docker-buildx-plugin
       - docker-compose-plugin
+    state: present
+
+- name: "[Common] Ensure docker-ce is enabled at boot time"
+  ansible.builtin.service:
+    name: docker
     enabled: true
 
 - name: "Configure docker"
