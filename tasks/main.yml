@@ -1,22 +1,24 @@
 ---
-- name: Fail if the OS is not supported
-  fail:
-    msg="This role is not supported on {{ansible_distribution}}"
-  when: "ansible_distribution != 'Ubuntu' and ansible_os_family != 'RedHat'"
 
-- name: Include distribution-specific variables
-  include_vars: "{{ item }}"
+- name: "Fail if the OS is not supported"
+  ansible.builtin.fail:
+    msg: "This role is not supported on {{ ansible_distribution }}"
+  when: "ansible_distribution != 'Ubuntu' and ansible_distribution != 'Debian' and ansible_os_family != 'RedHat'"
+
+- name: "Include distribution-specific variables"
+  ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
-    - "vars/{{ ansible_distribution|lower }}.yml"
-    - "vars/{{ ansible_os_family|lower }}.yml"
+    - "vars/{{ ansible_distribution | lower }}.yml"
+    - "vars/{{ ansible_os_family | lower }}.yml"
 
 # Include the relevant distro-specific task
-- name: Perform setup for Ubuntu
-  include: ubuntu.yml
-  when: ansible_distribution == 'Ubuntu'
+- name: "Perform setup for Ubuntu/Debian"
+  ansible.builtin.include_tasks: debian_family.yml
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
-- name: Perform setup for EL and derivatives
-  include: redhat.yml
+- name: "Perform setup for EL and derivatives"
+  ansible.builtin.include_tasks: redhat_family.yml
   when: ansible_os_family == 'RedHat'
 
-- meta: flush_handlers
+- name: "Flush handlers"
+  ansible.builtin.meta: flush_handlers

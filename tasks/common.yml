@@ -2,16 +2,19 @@
 # Common setup tasks for all supported OS families
 
 - name: "[Common] Install Docker CE package"
-  package:
-    name=docker-ce
-    state=present
+  ansible.builtin.package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
 
 - name: "[Common] Ensure docker-ce is enabled at boot time"
-  service: name=docker enabled=yes
+  ansible.builtin.service:
+    name: docker
+    enabled: true
 
 - name: "Configure docker"
-  include: configure.yml
-
-- name: "Install compose"
-  pip: name="docker-compose" state="present" version="{{ docker_compose_version }}"
-  when: docker_compose_version != ""
+  ansible.builtin.include_tasks: configure.yml

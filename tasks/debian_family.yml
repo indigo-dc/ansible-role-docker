@@ -1,0 +1,30 @@
+---
+
+- name: "[Ubuntu] Fail if release is not supported (Ubuntu version >= 16.04)"
+  ansible.builtin.fail:
+    msg: "The role is designed only for Ubuntu 16.04 or higher"
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_version is version('16.04', '<')
+
+- name: "[Debian-like OS] Install docker requisites"
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+
+- name: "[Debian-like OS] Import the Docker repository key"
+  ansible.builtin.apt_key:
+    url: "{{ docker_apt_key_url }}"
+    state: present
+
+- name: "[Debian-like OS] Add docker apt repo"
+  ansible.builtin.apt_repository:
+    repo: "{{ docker_apt_repo }}"
+    state: present
+  notify: "Refresh apt cache"
+
+
+- name: "Perform common tasks"
+  ansible.builtin.include_tasks: common.yml

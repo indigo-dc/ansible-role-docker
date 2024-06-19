@@ -2,3 +2,6 @@
 # Package names for Ubuntu
 python_dev_package: python-dev
 python_setuptools_package: python-setuptools
+
+docker_apt_key_url: https://download.docker.com/linux/ubuntu/gpg
+docker_apt_repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
